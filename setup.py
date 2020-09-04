@@ -16,7 +16,7 @@ setup(
     url="https://github.com/jseabold/pandas-selectable",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License"
+        "License :: OSI Approved :: MIT License",
     ],
     python_requires=">=3.6",
 )
