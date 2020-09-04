@@ -4,37 +4,43 @@ from functools import wraps
 
 import pandas as pd
 from pandas.core.accessor import CachedAccessor
-from pandas.core.indexes.accessors import (CombinedDatetimelikeProperties,
-                                           DatetimeProperties,
-                                           PeriodProperties)
+from pandas.core.indexes.accessors import (
+    CombinedDatetimelikeProperties,
+    DatetimeProperties,
+    PeriodProperties,
+)
 from pandas.core.strings import StringMethods
 from pandas.util._decorators import doc
 
-_str_boolean_methods = set([
-    'contains',
-    'endswith',
-    'isalnum',
-    'isalpha',
-    'isdecimal',
-    'isdigit',
-    'islower',
-    'isnumeric',
-    'isspace',
-    'istitle',
-    'isupper',
-    'match',
-    'startswith',
-])
+_str_boolean_methods = set(
+    [
+        'contains',
+        'endswith',
+        'isalnum',
+        'isalpha',
+        'isdecimal',
+        'isdigit',
+        'islower',
+        'isnumeric',
+        'isspace',
+        'istitle',
+        'isupper',
+        'match',
+        'startswith',
+    ]
+)
 
-_date_boolean_methods = set([
-    'is_leap_year',
-    'is_month_end',
-    'is_month_start',
-    'is_quarter_end',
-    'is_quarter_start',
-    'is_year_end',
-    'is_year_start',
-])
+_date_boolean_methods = set(
+    [
+        'is_leap_year',
+        'is_month_end',
+        'is_month_start',
+        'is_quarter_end',
+        'is_quarter_start',
+        'is_year_end',
+        'is_year_start',
+    ]
+)
 
 
 class StringSelectMethods(StringMethods):
@@ -47,11 +53,14 @@ class StringSelectMethods(StringMethods):
         super().__init__(self._series, *args[1:], **kwargs)
 
     def __getattribute__(self, attr):
-        if (not attr.startswith("_") and  # noqa
-                inspect.isroutine(getattr(StringMethods, attr, None))
-            and attr not in _str_boolean_methods):  # noqa
-            raise NotImplementedError("Boolean selection with this method "
-                                      "does not make sense.")
+        if (
+            not attr.startswith("_")
+            and inspect.isroutine(getattr(StringMethods, attr, None))  # noqa
+            and attr not in _str_boolean_methods
+        ):  # noqa
+            raise NotImplementedError(
+                "Boolean selection with this method " "does not make sense."
+            )
         else:
             return super().__getattribute__(attr)
 
@@ -69,11 +78,16 @@ class SelectDatetimeProperties(DatetimeProperties):
         super().__init__(*args, **kwargs)
 
     def __getattribute__(self, attr):
-        if (not attr.startswith("_") and  # noqa
-                inspect.isroutine(getattr(DatetimeProperties, attr, None))
-            and attr not in _date_boolean_methods): # noqa
-            raise NotImplementedError("Boolean selection with this method "
-                                      "does not make sense.")
+        if (
+            not attr.startswith("_")
+            and inspect.isroutine(  # noqa
+                getattr(DatetimeProperties, attr, None)
+            )
+            and attr not in _date_boolean_methods
+        ):  # noqa
+            raise NotImplementedError(
+                "Boolean selection with this method " "does not make sense."
+            )
         elif attr in _date_boolean_methods:
             idx = super().__getattribute__(attr)
             return self._parent_frame.loc[idx]
@@ -96,17 +110,16 @@ class DateSelectMethods(CombinedDatetimelikeProperties):
         properties = super().__new__(cls, series._series)
         if isinstance(properties, DatetimeProperties):
             return SelectDatetimeProperties(
-                series._parent,
-                properties._parent,
-                properties.orig)
+                series._parent, properties._parent, properties.orig
+            )
         elif isinstance(properties, PeriodProperties):
             return SelectPeriodProperties(
-                series._frame,
-                properties._parent,
-                properties.orig
+                series._frame, properties._parent, properties.orig
             )
-        raise AttributeError("Can only use select.dt accessor on"
-                             "datetimelike and periodlike values.")
+        raise AttributeError(
+            "Can only use select.dt accessor on"
+            "datetimelike and periodlike values."
+        )
 
 
 def selector_wrapper(klass, method_name):
@@ -119,6 +132,7 @@ def selector_wrapper(klass, method_name):
         series = self._series
         idx = getattr(klass, method_name)(series, *args, **kwargs)
         return self._parent.loc[idx]
+
     return selector
 
 

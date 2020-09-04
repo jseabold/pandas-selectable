@@ -49,11 +49,11 @@ def test_str(dta):
 def test_dt(dta):
     assert dta.select.B.dt.is_leap_year.equals(dta)
     assert len(dta.select.B.dt.is_month_end) == 0
-    assert (dta.select.B.dt.is_month_start.equals(dta.loc[[0]]))
+    assert dta.select.B.dt.is_month_start.equals(dta.loc[[0]])
     assert len(dta.select.B.dt.is_quarter_end) == 0
-    assert (dta.select.B.dt.is_quarter_start.equals(dta.loc[[0]]))
+    assert dta.select.B.dt.is_quarter_start.equals(dta.loc[[0]])
     assert len(dta.select.B.dt.is_year_end) == 0
-    assert (dta.select.B.dt.is_year_start.equals(dta.loc[[0]]))
+    assert dta.select.B.dt.is_year_start.equals(dta.loc[[0]])
 
 
 def test_index(dta):
