@@ -1,4 +1,4 @@
-import pandas_select  # noqa
+import pandas_selectable  # noqa
 
 
 def test_accessor_registered(dta):
