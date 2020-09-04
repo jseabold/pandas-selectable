@@ -1,10 +1,10 @@
-# pandas-select
+# pandas-selectable
 
-![test status](https://github.com/jseabold/pandas-select/workflows/tests/badge.svg)
+![test status](https://github.com/jseabold/pandas-selectable/workflows/tests/badge.svg)
 
 ## What Is It?
 
-`pandas-select` adds a `select` accessor to pandas DataFrames and Series. It's like `query` but with the niceties of tab-completion.
+`pandas-selectable` adds a `select` accessor to pandas DataFrames and Series. It's like `query` but with the niceties of tab-completion.
 
 ## Quickstart
 
@@ -13,7 +13,7 @@ In [1]: import numpy as np
 
 In [2]: import pandas as pd
 
-In [3]: import pandas_select  # magic
+In [3]: import pandas_selectable  # magic
 
 In [4]: dta = pd.DataFrame.from_dict({
    ...:     'A': ['A', 'B', 'C'] * 5,
@@ -104,5 +104,5 @@ Name: A, dtype: object
 ## Installation
 
 ```bash
-pip install pandas-select
+pip install pandas-selectable
 ```
