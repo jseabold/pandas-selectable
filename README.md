@@ -99,6 +99,8 @@ Name: A, dtype: object
 
 ## Requirements
 
+[pandas](https://pandas.pydata.org/) >= 1.1
+
 ## Installation
 
 ```bash
