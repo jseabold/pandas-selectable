@@ -177,6 +177,14 @@ class SelectableIndex:
     def isnull(self):
         return self._parent.loc[self._parent.index.isnull()]
 
+    @doc(pd.Index.notnull)
+    def notnull(self):
+        return self._parent.loc[self._parent.index.notnull()]
+
+    @doc(pd.Index.notna)
+    def notna(self):
+        return self._parent.loc[self._parent.index.notna()]
+
     @doc(pd.Index.isin)
     def isin(self, values, levels=None):
         idx = self._parent.index.isin(values, levels)
@@ -196,6 +204,8 @@ class SelectableColumn:
     __ge__ = selector_wrapper(pd.Series, "__ge__")
     isna = selector_wrapper(pd.Series, "isna")
     isnull = selector_wrapper(pd.Series, "isnull")
+    notna = selector_wrapper(pd.Series, "notna")
+    notnull = selector_wrapper(pd.Series, "notnull")
     isin = selector_wrapper(pd.Series, "isin")
 
     def __init__(self, parent, series=None):
