@@ -19,6 +19,8 @@ def test_select(dta):
     assert ((dta.select.A != 3).A != 3).all()
     assert len(dta.select.A.isnull()) == 0
     assert len(dta.select.A.isna()) == 0
+    assert dta.select.A.notnull().shape == (15, 4)
+    assert dta.select.A.notna().shape == (15, 4)
     assert len(dta.select.A.isin([5])) == 1
 
 
@@ -66,6 +68,8 @@ def test_index(dta):
 
     assert len(dta.select.index.isna()) == 0
     assert len(dta.select.index.isnull()) == 0
+    assert dta.select.index.notnull().shape == (15, 4)
+    assert dta.select.index.notna().shape == (15, 4)
     assert len(dta.select.index.isin([10, 11])) == 2
 
 
