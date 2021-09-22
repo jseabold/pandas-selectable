@@ -56,6 +56,8 @@ def test_dt(dta):
     assert dta.select.B.dt.is_quarter_start.equals(dta.loc[[0]])
     assert len(dta.select.B.dt.is_year_end) == 0
     assert dta.select.B.dt.is_year_start.equals(dta.loc[[0]])
+    assert len(dta.select.B.dt.day == 15) == 1
+    assert len(dta.select.B.dt.month == 2) == 0
 
 
 def test_index(dta):
