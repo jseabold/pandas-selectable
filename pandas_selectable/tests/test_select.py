@@ -58,6 +58,7 @@ def test_dt(dta):
     assert dta.select.B.dt.is_year_start.equals(dta.loc[[0]])
     assert len(dta.select.B.dt.day == 15) == 1
     assert len(dta.select.B.dt.month == 2) == 0
+    assert len(dta.select.B.between("2020-01-03", "2020-01-05")) == 3
 
 
 def test_index(dta):
