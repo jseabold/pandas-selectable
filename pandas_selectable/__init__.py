@@ -2,6 +2,7 @@ import inspect
 import operator
 from functools import wraps
 
+import numpy as np
 import pandas as pd
 from pandas.core.accessor import CachedAccessor
 from pandas.core.indexes.accessors import (
@@ -68,31 +69,6 @@ class StringSelectMethods(StringMethods):
         # remove methods that don't return boolean index
         bool_idx = super()._wrap_result(*args, **kwargs)
         return self._parent_frame.loc[bool_idx]
-
-
-class SelectDatetimeProperties(DatetimeProperties):
-    def __init__(self, parent, *args, **kwargs):
-        # datetime properties holds an attribute _parent
-        # we need to add the parent_frame (or series) to the subclass instances
-        self._parent_frame = parent
-        super().__init__(*args, **kwargs)
-
-    def __getattribute__(self, attr):
-        if (
-            not attr.startswith("_")
-            and inspect.isroutine(  # noqa
-                getattr(DatetimeProperties, attr, None)
-            )
-            and attr not in _date_boolean_methods
-        ):  # noqa
-            raise NotImplementedError(
-                "Boolean selection with this method " "does not make sense."
-            )
-        elif attr in _date_boolean_methods:
-            idx = super().__getattribute__(attr)
-            return self._parent_frame.loc[idx]
-        else:
-            return super().__getattribute__(attr)
 
 
 class SelectPeriodProperties(PeriodProperties):
@@ -207,6 +183,7 @@ class SelectableColumn:
     notna = selector_wrapper(pd.Series, "notna")
     notnull = selector_wrapper(pd.Series, "notnull")
     isin = selector_wrapper(pd.Series, "isin")
+    between = selector_wrapper(pd.Series, "between")
 
     def __init__(self, parent, series=None):
         # if accessed as the series accessor, parent is the series
@@ -252,3 +229,37 @@ class DataFrameSelectAccessor:
     @property
     def index(self):
         return SelectableIndex(self._frame)
+
+
+class SelectDatetimeProperties(DatetimeProperties):
+    def __init__(self, parent, *args, **kwargs):
+        # datetime properties holds an attribute _parent
+        # we need to add the parent_frame (or series) to the subclass instances
+        self._parent_frame = parent
+        super().__init__(*args, **kwargs)
+
+    def __getattribute__(self, attr):
+        if (
+            not attr.startswith("_")
+            and inspect.isroutine(  # noqa
+                getattr(DatetimeProperties, attr, None)
+            )
+            and attr not in _date_boolean_methods
+        ):  # noqa
+            raise NotImplementedError(
+                "Boolean selection with this method " "does not make sense."
+            )
+        elif attr in _date_boolean_methods:
+            idx = super().__getattribute__(attr)
+            return self._parent_frame.loc[idx]
+        else:
+            got_attr = super().__getattribute__(attr)
+            # this allows things like dt.day, dt.month to be selectable
+            # for the parent frame. assumes they're all properties.
+            if (
+                isinstance(got_attr, pd.Series)
+                and not attr.startswith('_')
+                and isinstance(getattr(self.__class__, attr), property)
+            ):
+                return SelectableColumn(self._parent_frame, got_attr)
+            return got_attr
