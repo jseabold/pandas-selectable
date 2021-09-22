@@ -183,6 +183,7 @@ class SelectableColumn:
     notna = selector_wrapper(pd.Series, "notna")
     notnull = selector_wrapper(pd.Series, "notnull")
     isin = selector_wrapper(pd.Series, "isin")
+    between = selector_wrapper(pd.Series, "between")
 
     def __init__(self, parent, series=None):
         # if accessed as the series accessor, parent is the series
