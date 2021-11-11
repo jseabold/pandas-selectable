@@ -16,32 +16,32 @@ In [2]: import pandas as pd
 In [3]: import pandas_selectable  # magic
 
 In [4]: dta = pd.DataFrame.from_dict({
-   ...:     'A': ['A', 'B', 'C'] * 5,
-   ...:     'B': np.arange(1, 16),
-   ...:     'C': pd.date_range('2020-01-01', periods=15)
+   ...:     'X': ['A', 'B', 'C'] * 5,
+   ...:     'Y': np.arange(1, 16),
+   ...:     'Z': pd.date_range('2020-01-01', periods=15)
    ...: })
 
 In [5]: dta.head()
 Out[5]:
-   A  B          C
+   X  Y          Z
 0  A  1 2020-01-01
 1  B  2 2020-01-02
 2  C  3 2020-01-03
 3  A  4 2020-01-04
 4  B  5 2020-01-05
 
-In [6]: dta.select.A == 'B'
+In [6]: dta.select.X == 'B'
 Out[6]:
-    A   B          C
+    X   Y          Z
 1   B   2 2020-01-02
 4   B   5 2020-01-05
 7   B   8 2020-01-08
 10  B  11 2020-01-11
 13  B  14 2020-01-14
 
-In [7]: dta.select.C >= '2020-01-03'
+In [7]: dta.select.Z >= '2020-01-03'
 Out[7]:
-    A   B          C
+    X   Y          Z
 2   C   3 2020-01-03
 3   A   4 2020-01-04
 4   B   5 2020-01-05
@@ -56,45 +56,45 @@ Out[7]:
 13  B  14 2020-01-14
 14  C  15 2020-01-15
 
-In [8]: dta.select.A.str.contains('A')
+In [8]: dta.select.X.str.contains('A')
 Out[8]:
-    A   B          C
+    X   Y          Z
 0   A   1 2020-01-01
 3   A   4 2020-01-04
 6   A   7 2020-01-07
 9   A  10 2020-01-10
 12  A  13 2020-01-13
 
-In [9]: dta.select.C.dt.is_month_start
+In [9]: dta.select.Z.dt.is_month_start
 Out[9]:
-   A  B          C
+   X  Y          Z
 0  A  1 2020-01-01
 ```
 
 It also works for Series.
 
 ```python
-In [10]: dta.A.select == 'A'
+In [10]: dta.X.select == 'A'
 Out[10]:
 0     A
 3     A
 6     A
 9     A
 12    A
-Name: A, dtype: object
+Name: X, dtype: object
 ```
 
 Though the string and datetime accessor APIs are slightly inconsistent. They're available via the select accessor now.
 
 ```python
-In [11]: dta.A.select.str.contains('B')
+In [11]: dta.X.select.str.contains('B')
 Out[11]:
 1     B
 4     B
 7     B
 10    B
 13    B
-Name: A, dtype: object
+Name: X, dtype: object
 ```
 
 ## Requirements
