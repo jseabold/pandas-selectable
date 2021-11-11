@@ -7,7 +7,7 @@ with open("README.md") as readme:
 
 setup(
     name='pandas_selectable',
-    version='1.1.0',
+    version='1.1.1',
     description='Add a select accessor to pandas',
     packages=['pandas_selectable'],
     long_description=description,
