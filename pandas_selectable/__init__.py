@@ -2,7 +2,6 @@ import inspect
 import operator
 from functools import wraps
 
-import numpy as np
 import pandas as pd
 from pandas.core.accessor import CachedAccessor
 from pandas.core.indexes.accessors import (
@@ -10,7 +9,11 @@ from pandas.core.indexes.accessors import (
     DatetimeProperties,
     PeriodProperties,
 )
-from pandas.core.strings import StringMethods
+
+try:
+    from pandas.core.strings import StringMethods
+except ImportError:  # moved in pandas 2
+    from pandas.core.strings.accessor import StringMethods
 from pandas.util._decorators import doc
 
 _str_boolean_methods = set(
